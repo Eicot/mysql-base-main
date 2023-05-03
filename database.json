@@ -1,9 +1,9 @@
 {
     "dev": {
       "driver": "mysql",
-      "user": "foo",
-      "password":"Zha1531994!",
-      "database":"organic" 
+      "user": "sqluser",
+      "password":"Password1@",
+      "database":"organic",
+      "host":"127.0.0.1"
     }
-  }
-  
+}
