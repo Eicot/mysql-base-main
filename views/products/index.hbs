@@ -7,6 +7,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Category</th>
+            <th>Tag</th>
             <th>Cost</th>
             <th>Description</th>
             <th></th>
@@ -24,7 +25,13 @@
                 </td>
                 <td>
                 {{this.category.name}}
-            </td>
+                </td>
+                <td>
+                    {{#each this.tags}}
+                    <span class="badge bg-primary">
+                        {{this.name}}</span>
+                    {{/each}}
+                </td>
                 <td>
                     {{this.cost}}
                 </td>
