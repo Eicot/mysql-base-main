@@ -50,9 +50,12 @@ const createProductForm = (allCategories=[]) => {
             }
         }),
         'category_id': fields.string({
+            label: 'Category',
             required: true,
             errorAfterField: true,
-            
+            cssClasses: {
+                label: ['form-label']
+            },
             widget: widgets.select(),
             choices: allCategories
         })
