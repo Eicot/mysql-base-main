@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // #1 import in the Product model
-const {Product} = require('../models')
+const {Product, Category} = require('../models')
 // import in the Forms
 const { bootstrapField, createProductForm } = require('../forms');
 
@@ -15,21 +15,31 @@ router.get('/', async (req,res)=>{
 })
 
 router.get('/create', async (req, res) => {
-    const productForm = createProductForm();
+
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get("id"), category.get('name')]
+    })
+
+    const productForm = createProductForm(allCategories);
     res.render('products/create',{
         'form': productForm.toHTML(bootstrapField)
     })
 })
 
 router.post('/create', async(req,res)=>{
-    console.log('post/create')
-    const productForm = createProductForm();
+
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get("id"), category.get('name')]
+    })
+    
+    const productForm = createProductForm(allCategories);
     productForm.handle(req, {
         'success': async (form) => {
             const product = new Product();
             product.set('name', form.data.name);
             product.set('cost', form.data.cost);
             product.set('description', form.data.description);
+            product.set('category_id', form.data.category_id);
             await product.save();
             res.redirect('/products');
         },
@@ -50,12 +60,17 @@ router.get('/:product_id/update', async (req, res) => {
         require: true
     });
 
-    const productForm = createProductForm();
+    const allCategories = await Category.fetchAll().map((category) => {
+        return [category.get("id"), category.get('name')]
+    })
+
+    const productForm = createProductForm(allCategories);
 
     // fill in the existing values
     productForm.fields.name.value = product.get('name');
     productForm.fields.cost.value = product.get('cost');
     productForm.fields.description.value = product.get('description');
+    productForm.fields.category_id.value = product.get('category_id');
 
     res.render('products/update', {
         'form': productForm.toHTML(bootstrapField),
